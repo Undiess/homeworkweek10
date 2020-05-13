@@ -14,35 +14,62 @@ const render = require("./lib/htmlRenderer");
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 const managers = [];
+const engineers = [];
+const intern = [];
+
 
 function askForRole(){
-    return inquirer.prompt([
-        {
-          type:"string",
-          name:"role",
-          message: "What is your role (manager,engineer or intern?)"
-        }
-    ])
-    .then(answers =>{
-       const role = answers.role.toLowerCase()
+   return inquirer.prompt([
+       {
+         type:"string",
+         name:"role",
+         message: "What is your role (manager,engineer or intern?)"
+       }
+   ])
+   .then(answers =>{
+      const role = answers.role.toLowerCase()
 
-       switch(role){
-           case "manager":
-             managerQuestions()
-             .then(answers => {
-                 const add = new Manager(answers.name,answers.id,answers.email,answers.officenumber)
-                 managers.push(add)
-                 console.log(managers)
+      switch(role){
+          case "manager":
+            managerQuestions()
+            .then(answers => {
+                const add = new Manager(answers.name,answers.id,answers.email,answers.officenumber)
+                managers.push(add)
+                console.log(managers)
 
-             })
+            })
+          ;
+          break;
+
+          case "engineer":
+           Engineerquestions()
+           .then(answers => {
+               const add = new Engineer(answers.name,answers.id,answers.email,answers.github)
+               engineers.push(add)
+               console.log(engineers)
+            ;
+           })
+           break;
+           
+
+           case "intern":
+           internquestions()
+           .then(answers => {
+               const add = new Intern(answers.name,answers.id,answers.email,answers.school)
+               intern.push(add)
+               console.log(intern)
+            ;
+           })
            break;
 
+           default: 
+           console.log("please enter a valid role");
 
 
-       }
-    
-    })
+      }
    
+   })
+  
 }
 
 
@@ -76,11 +103,90 @@ const managerQuestions = function (){
 }
 
 
+const Engineerquestions = function (){
+    return inquirer.prompt([
+        {
+            type:"string",
+            name: "name",
+            message:"What is your name: "
+        },
 
+        {
+            type:"string",
+            name: "id",
+            message:"What is your id: "
+        },
+
+        {
+            type:"string",
+            name: "email",
+            message:"What is your email: "
+        },
+
+        {
+            type:"string",
+            name: "github",
+            message:"What is your github: "
+        }
+    ])
+}
+
+
+const internquestions = function (){
+    return inquirer.prompt([
+        {
+            type:"string",
+            name: "name",
+            message:"What is your name: "
+        },
+
+        {
+            type:"string",
+            name: "id",
+            message:"What is your id: "
+        },
+
+        {
+            type:"string",
+            name: "email",
+            message:"What is your email: "
+        },
+
+        {
+            type:"string",
+            name: "school",
+            message:"What is your school: "
+        }
+    ])
+}
+/*
+var repeat = true
+async function inputs(){
+    while(repeat){
+        await askForRole();
+
+         inquirer
+        .prompt([
+        
+          {
+            type: "string",
+            name: "anotheremployee",
+            message: "Would you like to add another employee"
+          }
+        ])
+        .then(answers => {
+            var userresponse = answers.toLowerCase
+            if (userresponse == "no"){
+                repeat = false;
+            }
+        })
+    }
+}
+*/
 
 askForRole()
 
-
+render(managers)
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
 // generate and return a block of HTML including templated divs for each employee!
