@@ -5,17 +5,16 @@ const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
 
+const util = require("util");
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
-
+const writeFileAsync = util.promisify(fs.writeFile);
 const render = require("./lib/htmlRenderer");
 
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
-const managers = [];
-const engineers = [];
-const intern = [];
+const team = []
 
 
 function askForRole(){
@@ -27,15 +26,17 @@ function askForRole(){
        }
    ])
    .then(answers =>{
-      const role = answers.role.toLowerCase()
+      const role = answers.role.toLowerCase(
+          
+      )
 
       switch(role){
           case "manager":
             managerQuestions()
             .then(answers => {
                 const add = new Manager(answers.name,answers.id,answers.email,answers.officenumber)
-                managers.push(add)
-                console.log(managers)
+                team.push(add)
+                console.log(team)
 
             })
           ;
@@ -45,8 +46,8 @@ function askForRole(){
            Engineerquestions()
            .then(answers => {
                const add = new Engineer(answers.name,answers.id,answers.email,answers.github)
-               engineers.push(add)
-               console.log(engineers)
+               team.push(add)
+               console.log(team)
             ;
            })
            break;
@@ -56,20 +57,16 @@ function askForRole(){
            internquestions()
            .then(answers => {
                const add = new Intern(answers.name,answers.id,answers.email,answers.school)
-               intern.push(add)
-               console.log(intern)
+               team.push(add)
+               console.log(team)
             ;
            })
            break;
 
            default: 
            console.log("please enter a valid role");
-
-
       }
-   
    })
-  
 }
 
 
@@ -159,6 +156,7 @@ const internquestions = function (){
         }
     ])
 }
+
 /*
 var repeat = true
 async function inputs(){
@@ -184,9 +182,18 @@ async function inputs(){
 }
 */
 
-askForRole()
 
-render(managers)
+async function qa(){
+    await askForRole();
+    
+}
+
+qa()
+
+
+
+
+
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
 // generate and return a block of HTML including templated divs for each employee!
