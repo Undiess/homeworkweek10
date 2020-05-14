@@ -1,4 +1,4 @@
-![alt text](/Capture.png)
+![image](/Capture.PNG)
 
 # Unit 10 OOP Homework: Template Engine - Employee Summary
 
